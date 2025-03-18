@@ -1,0 +1,74 @@
+[
+  {
+    "id": 5,
+    "nombre": "jose",
+    "email": "luisrodriguez@luisrocedev.es",
+    "estado_funnel": "Nuevo"
+  },
+  {
+    "id": 5,
+    "nombre": "Ejemplo Usuario",
+    "email": "ejemplo@gmail.com",
+    "estado_funnel": "Nuevo"
+  },
+  {
+    "id": 6,
+    "nombre": "Ejemplo Usuario",
+    "email": "ejemplo@gmail.com",
+    "estado_funnel": "Nuevo"
+  },
+  {
+    "id": 7,
+    "nombre": "Ejemplo Usuario",
+    "email": "ejemplo@gmail.com",
+    "estado_funnel": "Nuevo"
+  },
+  {
+    "id": 8,
+    "nombre": "Ejemplo Usuario",
+    "email": "ejemplo@gmail.com",
+    "estado_funnel": "Nuevo"
+  },
+  {
+    "id": 9,
+    "nombre": "Ejemplo Usuario",
+    "email": "ejemplo@gmail.com",
+    "estado_funnel": "Nuevo"
+  },
+  {
+    "id": 10,
+    "nombre": "Ejemplo Usuario",
+    "email": "ejemplo@gmail.com",
+    "estado_funnel": "Nuevo"
+  },
+  {
+    "id": 11,
+    "nombre": "Ejemplo Usuario",
+    "email": "ejemplo@gmail.com",
+    "estado_funnel": "Nuevo"
+  },
+  {
+    "id": 12,
+    "nombre": "Ejemplo Usuario",
+    "email": "ejemplo@gmail.com",
+    "estado_funnel": "Nuevo"
+  },
+  {
+    "id": 13,
+    "nombre": "Ejemplo Usuario",
+    "email": "ejemplo@gmail.com",
+    "estado_funnel": "Nuevo"
+  },
+  {
+    "id": 14,
+    "nombre": "Ejemplo Usuario",
+    "email": "ejemplo@gmail.com",
+    "estado_funnel": "Nuevo"
+  },
+  {
+    "id": 15,
+    "nombre": "Agustín Morcillo Aguado",
+    "email": "luisilustraciones@gmail.com",
+    "estado_funnel": "Cerrado"
+  }
+]

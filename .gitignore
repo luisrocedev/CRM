@@ -1,0 +1,23 @@
+# .gitignore para CRM Mini Proyecto
+
+# Dependencias de Node.js
+node_modules/
+
+# Archivos de log
+*.log
+logs/
+
+# Variables de entorno (si se usan)
+.env
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Configuraciones sensibles
+config/emailConfig.js
+
+# Salidas de compilación y directorios temporales
+dist/
+build/
+tmp/
