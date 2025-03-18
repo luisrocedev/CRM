@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administración - Academia</title>
+    <link rel="stylesheet" href="styles/admin.css">
+</head>
+<body>
+    <h1>Panel de Administración - Academia Online 🎓</h1>
+
+    <h2>📋 Lista de Alumnos</h2>
+    <button onclick="listarAlumnos()">🔄 Actualizar Lista</button>
+    <table id="tablaAlumnos">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Estado Funnel</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h2>➕ Agregar Alumno</h2>
+    <input id="nombreNuevo" type="text" placeholder="Nombre">
+    <input id="emailNuevo" type="email" placeholder="Email">
+    <select id="estadoNuevo">
+        <option>Nuevo</option>
+        <option>Interesado</option>
+        <option>En Negociacion</option>
+        <option>Cerrado</option>
+    </select>
+    <button onclick="crearAlumno()">✅ Crear</button>
+
+    <h2>📝 Editar Alumno</h2>
+    <input id="idEditar" type="number" placeholder="ID del Alumno">
+    <input id="nombreEditar" type="text" placeholder="Nuevo Nombre">
+    <input id="emailEditar" type="email" placeholder="Nuevo Email">
+    <select id="estadoEditar">
+        <option>Nuevo</option>
+        <option>Interesado</option>
+        <option>En Negociacion</option>
+        <option>Cerrado</option>
+    </select>
+    <button onclick="editarAlumno()">✏️ Editar</button>
+
+    <h2>🗑️ Eliminar Alumno</h2>
+    <input id="idEliminar" type="number" placeholder="ID del Alumno">
+    <button onclick="eliminarAlumno()">❌ Eliminar</button>
+
+    <script src="scripts/admin.js"></script>
+</body>
+</html>

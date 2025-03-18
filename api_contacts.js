@@ -1,88 +1,52 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
+const db = require('./config/db');
 const sendFunnelEmail = require('./funnels/funnelLogic');
 
-const contactsFile = path.join(__dirname, 'data', 'contacts.json');
-
-// Leer contactos (GET)
-router.get('/api/contacts', (req, res) => {
-    fs.readFile(contactsFile, 'utf8', (err, data) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).send('Error al leer contactos');
-        }
-        res.json(JSON.parse(data));
+// Obtener todos los alumnos
+router.get('/api/alumnos', (req, res) => {
+    db.query('SELECT * FROM alumnos', (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.json(results);
     });
 });
 
-// Crear contacto (POST) + Envío de email automático
-router.post('/api/contacts', (req, res) => {
-    try {
-        const contacts = JSON.parse(fs.readFileSync(contactsFile, 'utf8'));
+// Crear un nuevo alumno y enviar email
+router.post('/api/alumnos', (req, res) => {
+    const { nombre, email, estado_funnel } = req.body;
 
-        const newContact = {
-            id: contacts.length > 0 ? contacts[contacts.length - 1].id + 1 : 1,
-            ...req.body
-        };
+    db.query('INSERT INTO alumnos (nombre, email, estado_funnel) VALUES (?, ?, ?)',
+        [nombre, email, estado_funnel], (err, result) => {
+            if (err) return res.status(500).send(err);
 
-        contacts.push(newContact);
-        fs.writeFileSync(contactsFile, JSON.stringify(contacts, null, 2));
-
-        // Envío automático del email
-        sendFunnelEmail(newContact);
-
-        res.json(newContact);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error al crear contacto');
-    }
+            const newAlumno = { id: result.insertId, nombre, email, estado_funnel };
+            sendFunnelEmail(newAlumno); // Enviar email automático
+            res.json(newAlumno);
+        }
+    );
 });
 
-// Editar contacto (PUT) + Envío de email automático
-router.put('/api/contacts/:id', (req, res) => {
-    try {
-        let contacts = JSON.parse(fs.readFileSync(contactsFile, 'utf8'));
-        const id = parseInt(req.params.id);
-        const index = contacts.findIndex(c => c.id === id);
+// Editar alumno
+router.put('/api/alumnos/:id', (req, res) => {
+    const { nombre, email, estado_funnel } = req.body;
+    const { id } = req.params;
 
-        if (index === -1) {
-            return res.status(404).send('Contacto no encontrado');
+    db.query('UPDATE alumnos SET nombre = ?, email = ?, estado_funnel = ? WHERE id = ?',
+        [nombre, email, estado_funnel, id], (err) => {
+            if (err) return res.status(500).send(err);
+            res.json({ mensaje: 'Alumno actualizado correctamente' });
         }
-
-        contacts[index] = { id: contacts[index].id, ...req.body };
-        fs.writeFileSync(contactsFile, JSON.stringify(contacts, null, 2));
-
-        // Envío automático del email
-        sendFunnelEmail(contacts[index]);
-
-        res.json(contacts[index]);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error al editar contacto');
-    }
+    );
 });
 
-// Eliminar contacto (DELETE)
-router.delete('/api/contacts/:id', (req, res) => {
-    try {
-        let contacts = JSON.parse(fs.readFileSync(contactsFile, 'utf8'));
-        const id = parseInt(req.params.id);
+// Eliminar alumno
+router.delete('/api/alumnos/:id', (req, res) => {
+    const { id } = req.params;
 
-        const initialLength = contacts.length;
-        contacts = contacts.filter(contact => contact.id !== id);
-
-        if (contacts.length === initialLength) {
-            return res.status(404).send('Contacto no encontrado');
-        }
-
-        fs.writeFileSync(contactsFile, JSON.stringify(contacts, null, 2));
-        res.json({ mensaje: 'Contacto eliminado correctamente' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error al eliminar contacto');
-    }
+    db.query('DELETE FROM alumnos WHERE id = ?', [id], (err) => {
+        if (err) return res.status(500).send(err);
+        res.json({ mensaje: 'Alumno eliminado correctamente' });
+    });
 });
 
 module.exports = router;

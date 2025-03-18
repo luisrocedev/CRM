@@ -6,7 +6,8 @@ const path = require('path');
 app.use(express.json());
 
 // Archivos estáticos
-app.use(express.static(path.join(__dirname, 'views')));
+app.use('/views', express.static(path.join(__dirname, 'views')));
+
 
 // Rutas para la API (importación correcta y antes del listen())
 const contactsRoutes = require('./api_contacts.js');
