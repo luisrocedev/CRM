@@ -1,68 +1,95 @@
-## md
 # CRM - Sistema de Gestión de Relaciones con Clientes
 
 ## Descripción del Proyecto
 
-CRM es un sistema de gestión de relaciones con clientes diseñado para optimizar las operaciones diarias de una empresa. Este sistema permite gestionar clientes, contactos, y el estado del funnel de ventas de manera eficiente. El objetivo es proporcionar una plataforma integral que facilite la administración de clientes y mejore la experiencia del usuario.
+Este CRM es una aplicación web desarrollada en Node.js y JavaScript que permite gestionar clientes, contactos y el estado del funnel de ventas de una empresa. Su objetivo es centralizar la información comercial, facilitar el seguimiento de oportunidades y mejorar la eficiencia en la gestión de relaciones con clientes.
+
+## Tecnologías Utilizadas
+
+- **Node.js** (backend)
+- **JavaScript** (frontend y backend)
+- **HTML5 y CSS3** (interfaz de usuario)
+- **JSON** (almacenamiento de datos)
+- **Visual Studio Code** (entorno de desarrollo)
 
 ## Estructura del Proyecto
 
-El proyecto está organizado en varios módulos y carpetas para mantener un código limpio y modular. A continuación, se describe la estructura del proyecto:
+El proyecto está organizado de la siguiente manera:
 
 ```
-C:\xampp\htdocs\CRM
-├── .gitignore
-├── api
-│   └── api_contacts.js
+CRM-
+├── api_contacts.js
 ├── app.js
 ├── chart.js
-├── config
+├── main.js
+├── package.json
+├── README.md
+├── config/
 │   ├── db.js
 │   └── emailConfig.js
-├── data
+├── data/
 │   └── contacts.json
-├── funnels
+├── funnels/
 │   └── funnelLogic.js
-├── main.js
-├── package-lock.json
-├── package.json
-└── views
-    ├── admin.html
-    ├── admin.js
-    ├── index.html
-    ├── script.js
-    ├── scripts
-    └── styles
-        ├── admin.css
-        └── style.css
+├── views/
+│   ├── admin.html
+│   ├── admin.js
+│   ├── funnel.html
+│   ├── index.html
+│   ├── login.html
+│   ├── script.js
+│   └── styles/
+│       ├── admin.css
+│       └── style.css
 ```
 
 ## Funcionalidades Principales
 
-### 1. Gestión de Contactos
-- **CRUD de Contactos**: Crear, leer, actualizar y eliminar contactos.
-- **Estados del Funnel**: Manejar diferentes estados como Nuevo, Interesado, En Negociación, Cerrado.
+1. **Gestión de Contactos**
+   - Crear, leer, actualizar y eliminar contactos (CRUD).
+   - Asignar estados del funnel: Nuevo, Interesado, En Negociación, Cerrado.
+2. **Visualización de Datos**
+   - Gráficos del funnel de ventas (con `chart.js`).
+   - Listado y filtrado de contactos.
+3. **Notificaciones por Email**
+   - Envío automático de emails según el estado del contacto (configurable en `config/emailConfig.js`).
+4. **Interfaz Web Intuitiva**
+   - Formularios y tablas para gestionar contactos desde el navegador.
 
-### 2. Visualización de Datos
-- **Gráficos del Funnel**: Visualizar el estado de los contactos en el funnel de ventas.
-- **Listado de Contactos**: Mostrar una lista de todos los contactos con sus detalles.
+## Instalación y Puesta en Marcha
 
-### 3. Notificaciones por Email
-- **Envío Automático de Emails**: Enviar emails automáticos basados en el estado del funnel del contacto.
+1. Clona el repositorio:
+   ```bash
+   git clone <URL-del-repositorio>
+   ```
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
+3. Inicia la aplicación:
+   ```bash
+   npm start
+   ```
+4. Accede desde tu navegador a:
+   ```
+   http://localhost:3000
+   ```
 
-## Estado Actual del Proyecto
+## Uso Básico
 
-El proyecto está actualmente en desarrollo. Las funcionalidades básicas están implementadas, pero hay varias áreas que requieren mejoras y optimizaciones.
+- Añade, edita o elimina contactos desde la interfaz web.
+- Consulta el estado de cada contacto en el funnel de ventas.
+- Visualiza estadísticas y gráficos de tu proceso comercial.
 
-## Futuras Mejoras
+## Estado Actual y Futuras Mejoras
 
-1. **Mejora de la Interfaz de Usuario**: Rediseñar la interfaz para hacerla más intuitiva y fácil de usar.
-2. **Optimización del Rendimiento**: Mejorar el rendimiento de las consultas a la base de datos y la carga de datos en la interfaz.
-3. **Seguridad**: Implementar medidas adicionales de seguridad para proteger los datos sensibles.
-4. **Notificaciones**: Añadir un sistema de notificaciones para alertar a los empleados sobre eventos importantes.
-5. **Integración con Sistemas Externos**: Integrar el sistema con otros servicios como sistemas de pago en línea, plataformas de reservas, etc.
-6. **Análisis de Datos**: Implementar herramientas de análisis de datos para proporcionar información valiosa sobre el rendimiento del negocio.
+- El sistema es funcional y permite la gestión básica de contactos y ventas.
+- Próximas mejoras: rediseño de la interfaz, optimización de rendimiento, mayor seguridad, integración con otros sistemas y análisis avanzado de datos.
 
-## Conclusión
+## Contacto y Soporte
 
-CRM es una solución integral para la gestión de relaciones con clientes que está en constante evolución. Con las mejoras planificadas, el sistema se convertirá en una herramienta aún más poderosa y eficiente para la administración de clientes.
+Para dudas, sugerencias o reportar errores, contacta con el equipo de desarrollo o abre una issue en el repositorio.
+
+---
+
+**¡Gracias por usar este CRM!**
