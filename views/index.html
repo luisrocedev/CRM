@@ -2,62 +2,344 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mini CRM | Gestión de Contactos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Empresarial | Gestión de Contactos</title>
     <link rel="stylesheet" href="styles/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>CRM Mini Proyecto</h1>
+    <div class="crm-sidebar">
+        <div class="crm-sidebar-header">
+            <span class="crm-logo">CRM</span>
+        </div>
+        <nav class="crm-sidebar-nav">
+            <a href="index.html" class="crm-sidebar-link active"><i class="fas fa-address-book"></i> <span>Contactos</span></a>
+            <a href="admin.html" class="crm-sidebar-link"><i class="fas fa-cog"></i> <span>Administración</span></a>
+            <a href="funnel.html" class="crm-sidebar-link"><i class="fas fa-chart-funnel"></i> <span>Funnel</span></a>
+        </nav>
+        <div class="crm-sidebar-footer">
+            <button class="crm-btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</button>
+        </div>
+    </div>
     
-    <h2>Acciones Rápidas</h2>
-    <button onclick="recargarApp()">🔄 Recargar</button>
-    <button onclick="cerrarApp()">❌ Cerrar Aplicación</button>
-
-    <h2>Listar Contactos</h2>
-    <button onclick="listarContactos()">Listar contactos</button>
-    <div id="resultado"></div>
-
-    <h2>Crear Contacto</h2>
-    <input id="nombreNuevo" type="text" placeholder="Nombre">
-    <input id="emailNuevo" type="email" placeholder="Email">
-    <select id="estadoNuevo">
-        <option>Nuevo</option>
-        <option>Interesado</option>
-        <option>En Negociacion</option>
-        <option>Cerrado</option>
-    </select>
-    <button onclick="crearContacto()">Crear contacto</button>
-
-    <h2>Editar Contacto</h2>
-    <input id="idEditar" type="number" placeholder="ID del contacto">
-    <input id="nombreEditar" type="text" placeholder="Nuevo Nombre">
-    <input id="emailEditar" type="email" placeholder="Nuevo Email">
-    <select id="estadoEditar">
-        <option>Nuevo</option>
-        <option>Interesado</option>
-        <option>En Negociacion</option>
-        <option>Cerrado</option>
-    </select>
-    <button onclick="editarContacto()">Editar contacto</button>
-
-    <h2>Eliminar Contacto</h2>
-    <input id="idEliminar" type="number" placeholder="ID del contacto">
-    <button onclick="eliminarContacto()">Eliminar contacto</button>
-
-    <h2>Estadísticas del Funnel</h2>
-    <canvas id="funnelChart"></canvas>
+    <div class="crm-main-content">
+        <h1 class="crm-title">Gestión de Contactos</h1>
+        
+        <!-- Dashboard stats -->
+        <div class="dashboard-stats">
+            <div class="stat-card" id="total-contacts">
+                <div class="stat-title">Total contactos</div>
+                <div class="stat-value">0</div>
+                <div class="stat-trend up"><i class="fas fa-arrow-up"></i> <span>0%</span></div>
+            </div>
+            <div class="stat-card" id="nuevos-contacts">
+                <div class="stat-title">Nuevos</div>
+                <div class="stat-value">0</div>
+                <div class="stat-trend up"><i class="fas fa-arrow-up"></i> <span>0%</span></div>
+            </div>
+            <div class="stat-card" id="interesados-contacts">
+                <div class="stat-title">Interesados</div>
+                <div class="stat-value">0</div>
+                <div class="stat-trend up"><i class="fas fa-arrow-up"></i> <span>0%</span></div>
+            </div>
+            <div class="stat-card" id="cerrados-contacts">
+                <div class="stat-title">Cerrados</div>
+                <div class="stat-value">0</div>
+                <div class="stat-trend up"><i class="fas fa-arrow-up"></i> <span>0%</span></div>
+            </div>
+        </div>
+        
+        <div class="crm-actions">
+            <div class="search-container">
+                <input type="text" id="searchContact" placeholder="Buscar contactos..." class="search-input">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <div>
+                <button id="newContactBtn" class="action-btn"><i class="fas fa-plus"></i> Nuevo Contacto</button>
+                <a href="funnel.html" class="action-btn secondary"><i class="fas fa-chart-funnel"></i> Ver Funnel</a>
+            </div>
+        </div>
+        
+        <!-- Tabla de contactos -->
+        <div class="contacts-table-container">
+            <table class="crm-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="contactosTabla">
+                    <!-- Los contactos se cargarán aquí dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Modal para crear/editar contactos -->
+        <div id="contactModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Nuevo Contacto</h2>
+                    <span class="close-modal">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="modalNombre">Nombre</label>
+                        <input id="modalNombre" type="text" placeholder="Nombre completo">
+                    </div>
+                    <div class="form-group">
+                        <label for="modalEmail">Email</label>
+                        <input id="modalEmail" type="email" placeholder="correo@ejemplo.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="modalEstado">Estado en el Funnel</label>
+                        <select id="modalEstado">
+                            <option>Nuevo</option>
+                            <option>Interesado</option>
+                            <option>En Negociacion</option>
+                            <option>Cerrado</option>
+                        </select>
+                    </div>
+                    <input type="hidden" id="modalId">
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn-cancel">Cancelar</button>
+                    <button class="modal-btn-save">Guardar</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal de confirmación para eliminar -->
+        <div id="confirmModal" class="modal">
+            <div class="modal-content confirm-content">
+                <div class="modal-header">
+                    <h2>Confirmar eliminación</h2>
+                    <span class="close-modal">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas eliminar este contacto?</p>
+                    <p class="contact-to-delete"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn-cancel">Cancelar</button>
+                    <button class="modal-btn-delete">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <script>
-        function recargarApp() {
-            location.reload();
-        }
-
-        function cerrarApp() {
-            window.close();
+        function logout() {
+            fetch('/api/logout', { method: 'POST' })
+                .then(() => window.location.href = 'login.html');
         }
     </script>
-    
     <script src="script.js"></script>
-    <script src="chart.js"></script>
+    
+    <style>
+        .search-container {
+            display: flex;
+            align-items: center;
+            max-width: 400px;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: #f8f9fa;
+            transition: all 0.2s ease;
+        }
+        
+        .search-input:focus {
+            border-color: #3f8efc;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(63,142,252,0.2);
+        }
+        
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+        }
+        
+        .action-btn {
+            background: #3f8efc;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(63,142,252,0.2);
+        }
+        
+        .action-btn:hover {
+            background: #2e7bea;
+            box-shadow: 0 6px 10px rgba(63,142,252,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .action-btn.secondary {
+            background: #f8f9fa;
+            color: #1a2942;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .action-btn.secondary:hover {
+            background: #e9ecef;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+        }
+        
+        .contacts-table-container {
+            margin-top: 24px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: #fff;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            animation: modalFade 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .confirm-content {
+            max-width: 400px;
+        }
+        
+        @keyframes modalFade {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .close-modal {
+            font-size: 24px;
+            font-weight: 700;
+            color: #adb5bd;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #1a2942;
+        }
+        
+        .modal-btn-save {
+            background: #3f8efc;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .modal-btn-save:hover {
+            background: #2e7bea;
+        }
+        
+        .modal-btn-delete {
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .modal-btn-delete:hover {
+            background: #c82333;
+        }
+        
+        .modal-btn-cancel {
+            background: #f8f9fa;
+            color: #1a2942;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .modal-btn-cancel:hover {
+            background: #e9ecef;
+        }
+        
+        .contact-to-delete {
+            font-weight: 500;
+            color: #dc3545;
+        }
+    </style>
 </body>
 </html>

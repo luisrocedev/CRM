@@ -2,54 +2,447 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Panel de Administración - Academia</title>
-    <link rel="stylesheet" href="styles/admin.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Empresarial | Panel de Administración</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Panel de Administración - Academia Online 🎓</h1>
+    <div class="crm-sidebar">
+        <div class="crm-sidebar-header">
+            <span class="crm-logo">CRM</span>
+        </div>
+        <nav class="crm-sidebar-nav">
+            <a href="index.html" class="crm-sidebar-link"><i class="fas fa-address-book"></i> <span>Contactos</span></a>
+            <a href="admin.html" class="crm-sidebar-link active"><i class="fas fa-cog"></i> <span>Administración</span></a>
+            <a href="funnel.html" class="crm-sidebar-link"><i class="fas fa-chart-funnel"></i> <span>Funnel</span></a>
+        </nav>
+        <div class="crm-sidebar-footer">
+            <button class="crm-btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</button>
+        </div>
+    </div>
+    <div class="crm-main-content">
+        <h1 class="crm-title">Panel de Administración</h1>
+        
+        <!-- Dashboard stats -->
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-title">Total usuarios</div>
+                <div class="stat-value" id="total-usuarios">0</div>
+                <div class="stat-trend"><i class="fas fa-user-shield"></i></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Activos</div>
+                <div class="stat-value" id="usuarios-activos">0</div>
+                <div class="stat-trend up"><i class="fas fa-user-check"></i></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Administradores</div>
+                <div class="stat-value" id="usuarios-admin">0</div>
+                <div class="stat-trend"><i class="fas fa-user-cog"></i></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Último acceso</div>
+                <div class="stat-value" id="ultimo-acceso">Hoy</div>
+                <div class="stat-trend"><i class="fas fa-clock"></i></div>
+            </div>
+        </div>
 
-    <h2>📋 Lista de Alumnos</h2>
-    <button onclick="listarAlumnos()">🔄 Actualizar Lista</button>
-    <table id="tablaAlumnos">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Estado Funnel</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+        <div class="crm-actions">
+            <div class="search-container">
+                <input type="text" id="searchUsuario" placeholder="Buscar usuarios..." class="search-input">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <div>
+                <button id="newUserBtn" class="action-btn" onclick="mostrarFormularioNuevo()"><i class="fas fa-user-plus"></i> Nuevo Usuario</button>
+            </div>
+        </div>
 
-    <h2>➕ Agregar Alumno</h2>
-    <input id="nombreNuevo" type="text" placeholder="Nombre">
-    <input id="emailNuevo" type="email" placeholder="Email">
-    <select id="estadoNuevo">
-        <option>Nuevo</option>
-        <option>Interesado</option>
-        <option>En Negociacion</option>
-        <option>Cerrado</option>
-    </select>
-    <button onclick="crearAlumno()">✅ Crear</button>
+        <!-- Tabla de usuarios -->
+        <div class="contacts-table-container">
+            <table class="crm-table" id="tablaUsuarios">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-    <h2>📝 Editar Alumno</h2>
-    <input id="idEditar" type="number" placeholder="ID del Alumno">
-    <input id="nombreEditar" type="text" placeholder="Nuevo Nombre">
-    <input id="emailEditar" type="email" placeholder="Nuevo Email">
-    <select id="estadoEditar">
-        <option>Nuevo</option>
-        <option>Interesado</option>
-        <option>En Negociacion</option>
-        <option>Cerrado</option>
-    </select>
-    <button onclick="editarAlumno()">✏️ Editar</button>
+        <!-- Formularios de gestión de usuarios -->
+        <div class="admin-forms">
+            <div class="crm-card form-card" id="form-nuevo-usuario">
+                <h2><i class="fas fa-user-plus"></i> Agregar Usuario</h2>
+                <div class="form-group">
+                    <label for="usuarioNuevo">Usuario</label>
+                    <input id="usuarioNuevo" type="text" placeholder="Nombre de usuario">
+                </div>
+                <div class="form-group">
+                    <label for="passwordNuevo">Contraseña</label>
+                    <input id="passwordNuevo" type="password" placeholder="Contraseña segura">
+                </div>
+                <div class="form-group">
+                    <label for="rolNuevo">Rol</label>
+                    <select id="rolNuevo">
+                        <option value="user">Usuario</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button class="action-btn secondary" onclick="ocultarFormularios()">Cancelar</button>
+                    <button class="action-btn" onclick="crearUsuario()">Crear usuario</button>
+                </div>
+            </div>
 
-    <h2>🗑️ Eliminar Alumno</h2>
-    <input id="idEliminar" type="number" placeholder="ID del Alumno">
-    <button onclick="eliminarAlumno()">❌ Eliminar</button>
+            <div class="crm-card form-card" id="form-editar-usuario">
+                <h2><i class="fas fa-user-edit"></i> Editar Usuario</h2>
+                <input type="hidden" id="idUsuarioEditar">
+                <div class="form-group">
+                    <label for="usuarioEditar">Usuario</label>
+                    <input id="usuarioEditar" type="text" placeholder="Nombre de usuario">
+                </div>
+                <div class="form-group">
+                    <label for="passwordEditar">Contraseña</label>
+                    <input id="passwordEditar" type="password" placeholder="Nueva contraseña (dejar en blanco para mantener)">
+                </div>
+                <div class="form-group">
+                    <label for="rolEditar">Rol</label>
+                    <select id="rolEditar">
+                        <option value="user">Usuario</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button class="action-btn secondary" onclick="ocultarFormularios()">Cancelar</button>
+                    <button class="action-btn" onclick="editarUsuario()">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
 
-    <script src="scripts/admin.js"></script>
+        <!-- Modal de confirmación para eliminar -->
+        <div id="confirmModal" class="modal">
+            <div class="modal-content confirm-content">
+                <div class="modal-header">
+                    <h2>Confirmar eliminación</h2>
+                    <span class="close-modal">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas eliminar este usuario?</p>
+                    <p class="user-to-delete"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn-cancel">Cancelar</button>
+                    <button class="modal-btn-delete" onclick="confirmarEliminar()">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function logout() {
+            fetch('/api/logout', { method: 'POST' })
+                .then(() => window.location.href = 'login.html');
+        }
+    </script>
+    <script src="admin.js"></script>
+    
+    <style>
+        .admin-forms {
+            margin-top: 30px;
+            display: grid;
+            gap: 20px;
+        }
+        
+        .form-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            display: none;
+        }
+        
+        .form-card h2 {
+            color: #1a2942;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #1a2942;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: #f8f9fa;
+            transition: all 0.2s ease;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            border-color: #3f8efc;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(63,142,252,0.2);
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .search-container {
+            display: flex;
+            align-items: center;
+            max-width: 400px;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: #f8f9fa;
+            transition: all 0.2s ease;
+        }
+        
+        .search-input:focus {
+            border-color: #3f8efc;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(63,142,252,0.2);
+        }
+        
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+        }
+        
+        .action-btn {
+            background: #3f8efc;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(63,142,252,0.2);
+        }
+        
+        .action-btn:hover {
+            background: #2e7bea;
+            box-shadow: 0 6px 10px rgba(63,142,252,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .action-btn.secondary {
+            background: #f8f9fa;
+            color: #1a2942;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .action-btn.secondary:hover {
+            background: #e9ecef;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+        }
+        
+        .crm-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0 20px;
+        }
+        
+        .contacts-table-container {
+            margin-top: 24px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+        }
+        
+        .crm-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+        }
+        
+        .crm-table th,
+        .crm-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .crm-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #1a2942;
+        }
+        
+        .crm-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .crm-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: #fff;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            animation: modalFade 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .confirm-content {
+            max-width: 400px;
+        }
+        
+        @keyframes modalFade {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .close-modal {
+            font-size: 24px;
+            font-weight: 700;
+            color: #adb5bd;
+            cursor: pointer;
+        }
+        
+        .modal-btn-cancel {
+            background: #f8f9fa;
+            color: #1a2942;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .modal-btn-cancel:hover {
+            background: #e9ecef;
+        }
+        
+        .modal-btn-delete {
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .modal-btn-delete:hover {
+            background: #c82333;
+        }
+        
+        .user-to-delete {
+            font-weight: 500;
+            color: #dc3545;
+        }
+        
+        .action-icon {
+            cursor: pointer;
+            margin: 0 5px;
+            font-size: 1.1rem;
+            transition: all 0.2s ease;
+        }
+        
+        .edit-icon {
+            color: #3f8efc;
+        }
+        
+        .edit-icon:hover {
+            color: #2e7bea;
+        }
+        
+        .delete-icon {
+            color: #dc3545;
+        }
+        
+        .delete-icon:hover {
+            color: #c82333;
+        }
+    </style>
 </body>
 </html>

@@ -3,8 +3,8 @@ const mysql = require('mysql2');
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '', // Cambia esto si tu MySQL tiene contraseña
-    database: 'academia_online'
+    password: 'root', // Cambia esto si tu MySQL tiene contraseña
+    database: 'crm_contactos'
 });
 
 db.connect((err) => {
